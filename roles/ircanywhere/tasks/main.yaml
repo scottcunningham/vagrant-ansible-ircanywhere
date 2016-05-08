@@ -1,0 +1,24 @@
+---
+- name: Install unzip program
+  apt: name=unzip update_cache=yes
+
+- name: Create ircanywhere user
+  user: name={{ ircanywhere_user }}
+
+- name: Create base dirs
+  file: state=directory owner={{ ircanywhere_user }} mode=700 path={{ item }}
+  with_items:
+      - "{{ base_dir }}"
+      - "{{ base_dir }}/download"
+
+- name: Download release zip
+  get_url: url={{ download_url }} dest={{ zip_path }} mode=0440
+
+- name: Unzip release
+  unarchive: copy=no src={{ zip_path }} dest={{ base_dir }}
+
+- name: Template config
+  template: src=config.js.j2 dest={{ conf_path }}
+
+- name: Install dependencies
+  command: chdir=/opt/ircanywhere/ircanywhere-0.2-beta npm install

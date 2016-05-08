@@ -1,0 +1,47 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  vars:
+    ircanywhere_version: v0.2-beta
+    ircanywhere_port: 8080
+    ircanywhere_user: ircanywhere
+    ircanywhere_group: ircanywhere
+
+    # MongoDB
+    #
+    # 'mongodb-org' will be installed from MongoDB official repos
+    mongodb_package: mongodb-org
+    mongodb_version: "3.2"
+    mongodb_user_admin_name: admin
+    mongodb_user_admin_password: passw0rd
+    mongodb_root_admin_name: admin
+    mongodb_root_admin_password: passw0rd
+
+    # NodeJS
+    #
+    nodejs_version: "0.10"
+
+    # SSL
+    #
+    ssl_certs_cert_path: /etc/ssl/certs
+    ssl_certs_privkey_path: /etc/ssl/nginx-ircanywhere.pem
+
+    # NGINX
+    #
+    nginx_configs:
+        ssl:
+            - ssl_certificate_key {{ssl_certs_privkey_path}}
+            - ssl_certificate     {{ssl_certs_cert_path}}
+    nginx_sites:
+        default:
+            - listen 443 ssl
+            - server_name _
+            - proxy_pass "localhost:{{ ircanywhere_port }}"
+
+  roles:
+    - role: greendayonfire.mongodb
+    - role: geerlingguy.nodejs
+    - role: jdauphant.ssl-certs
+    - role: jdauphant.nginx
+    - role: ircanywhere

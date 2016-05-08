@@ -1,0 +1,6 @@
+# Third-party Galaxy roles
+
+- src: greendayonfire.mongodb
+- src: geerlingguy.nodejs
+- src: jdauphant.ssl-certs
+- src: jdauphant.nginx

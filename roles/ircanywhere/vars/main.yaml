@@ -1,0 +1,9 @@
+---
+github_url: "https://github.com/ircanywhere/ircanywhere/archive"
+download_url: "{{ github_url }}/{{ ircanywhere_version }}.zip"
+
+base_dir: /opt/ircanywhere
+zip_path: "{{ base_dir }}/download/{{ ircanywhere_version }}.zip"
+conf_path: "{{ base_dir }}.conf.js"
+
+ircanywhere_user: ircanywhere
